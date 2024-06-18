@@ -7,20 +7,20 @@ import CustomLink from "@/components/customLink";
 import SiteCharts from "@/components/siteCharts";
 
 const SiteStatus = ({ siteData, days, status }) => {
-  // 弹窗数据
+  // Modal data
   const [siteDetailsShow, setSiteDetailsShow] = useState(false);
   const [siteDetailsData, setSiteDetailsData] = useState(null);
 
-  // 是否显示链接
+  // Whether to show links
   const isShowLinks = import.meta.env.VITE_SHOW_LINKS === "true";
 
-  // 开启弹窗
+  // Open modal
   const showSiteDetails = (data) => {
     setSiteDetailsShow(true);
     setSiteDetailsData(data);
   };
 
-  // 关闭弹窗
+  // Close modal
   const closeSiteDetails = () => {
     setSiteDetailsShow(false);
     setSiteDetailsData(null);
@@ -56,10 +56,10 @@ const SiteStatus = ({ siteData, days, status }) => {
                       <div className="icon" />
                       <span className="tip">
                         {site.status === "ok"
-                          ? "正常访问"
+                          ? "Accessible"
                           : site.status === "unknown"
-                          ? "状态未知"
-                          : "无法访问"}
+                          ? "Status Unknown"
+                          : "Inaccessible"}
                       </span>
                     </div>
                   </div>
@@ -76,17 +76,17 @@ const SiteStatus = ({ siteData, days, status }) => {
                       let tooltipText = null;
                       if (uptime >= 100) {
                         status = "normal";
-                        tooltipText = `可用率 ${formatNumber(uptime)}%`;
+                        tooltipText = `Uptime ${formatNumber(uptime)}%`;
                       } else if (uptime <= 0 && down.times === 0) {
                         status = "none";
-                        tooltipText = "无数据";
+                        tooltipText = "No data";
                       } else {
                         status = "error";
-                        tooltipText = `故障 ${
+                        tooltipText = `Failures ${
                           down.times
-                        } 次，累计 ${formatDuration(
+                        } times, total ${formatDuration(
                           down.duration
-                        )}，可用率 ${formatNumber(uptime)}%`;
+                        )}, uptime ${formatNumber(uptime)}%`;
                       }
                       return (
                         <Tooltip
@@ -106,15 +106,13 @@ const SiteStatus = ({ siteData, days, status }) => {
                     })}
                   </div>
                   <div className="summary">
-                    <div className="now">今天</div>
+                    <div className="now">Today</div>
                     <div className="note">
                       {site.total.times
-                        ? `最近 ${days} 天内故障 ${
-                            site.total.times
-                          } 次，累计 ${formatDuration(
+                        ? `In the last ${days} days, ${site.total.times} failures, total ${formatDuration(
                             site.total.duration
-                          )}，平均可用率 ${site.average}%`
-                        : `最近 ${days} 天内可用率 ${site.average}%`}
+                          )}, average uptime ${site.average}%`
+                        : `Uptime in the last ${days} days ${site.average}%`}
                     </div>
                     <div className="day">
                       {site.daily[site.daily.length - 1].date.format(
@@ -124,7 +122,7 @@ const SiteStatus = ({ siteData, days, status }) => {
                   </div>
                 </div>
               ))}
-              {/* 站点详情 */}
+              {/* Site details */}
               <Modal
                 title={siteDetailsData?.name}
                 open={siteDetailsShow}
@@ -142,7 +140,7 @@ const SiteStatus = ({ siteData, days, status }) => {
         ) : (
           <Result
             status="error"
-            title="调用超限或请求错误，请刷新后重试"
+            title="Request limit exceeded or error, please refresh and try again"
             extra={
               <Button
                 type="primary"
@@ -151,7 +149,7 @@ const SiteStatus = ({ siteData, days, status }) => {
                   location.reload();
                 }}
               >
-                重试
+                Retry
               </Button>
             }
           />

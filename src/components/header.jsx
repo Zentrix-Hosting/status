@@ -12,26 +12,26 @@ const Header = observer(({ getSiteData }) => {
   const { status, cache } = useStores();
   const [lastClickTime, setLastClickTime] = useState(0);
 
-  // 加载配置
+  // Load configuration
   const siteName = import.meta.env.VITE_SITE_NAME;
 
-  // 状态文本
+  // Status messages
   const statusNames = {
-    loading: "站点状态加载中",
-    error: "部分站点出现异常",
-    allError: "全部站点出现异常",
-    normal: "所有站点运行正常",
-    wrong: "数据请求失败",
+    loading: "Loading site status",
+    error: "Some sites are down",
+    allError: "All sites are down",
+    normal: "All sites are running normally",
+    wrong: "Data request failed",
   };
 
-  // 刷新状态
+  // Refresh status
   const refreshStatus = () => {
     const currentTime = Date.now();
     if (currentTime - lastClickTime < 60000) {
       messageApi.open({
-        key: "updata",
+        key: "update",
         type: "warning",
-        content: "请稍后再尝试刷新",
+        content: "Please wait a bit before refreshing again",
       });
       return false;
     }
@@ -72,18 +72,18 @@ const Header = observer(({ getSiteData }) => {
                   timeout={300}
                 >
                   {status.siteState === "loading" ? (
-                    <span>数据加载中...</span>
+                    <span>Loading data...</span>
                   ) : status.siteState === "wrong" ? (
-                    <span>这可能是临时性问题，请刷新后重试</span>
+                    <span>This might be a temporary issue, please refresh and try again</span>
                   ) : (
                     <div className="time">
                       <span className="last-update">
-                        {`上次更新于 ${
+                        {`Last updated at ${
                           formatTimestamp(cache.siteData?.timestamp).justTime
                         }`}
                       </span>
                       <div className="update">
-                        <span>更新频率 5 分钟</span>
+                        <span>Update frequency: 5 minutes</span>
                         <Refresh className="refresh" onClick={refreshStatus} />
                       </div>
                     </div>
@@ -101,7 +101,7 @@ const Header = observer(({ getSiteData }) => {
               {status.siteOverview ? (
                 <div className="overview">
                   <div className="count">
-                    <span className="name">站点总数</span>
+                    <span className="name">Total sites</span>
                     <CountUp
                       className="num"
                       end={status.siteOverview.count}
@@ -110,7 +110,7 @@ const Header = observer(({ getSiteData }) => {
                   </div>
                   <div className="status-num">
                     <div className="ok-count">
-                      <span className="name">正常</span>
+                      <span className="name">Operational</span>
                       <CountUp
                         className="num"
                         end={status.siteOverview.okCount}
@@ -118,7 +118,7 @@ const Header = observer(({ getSiteData }) => {
                       />
                     </div>
                     <div className="down-count">
-                      <span className="name">异常</span>
+                      <span className="name">Down</span>
                       <span className="num">
                         <CountUp
                           className="num"
@@ -129,7 +129,7 @@ const Header = observer(({ getSiteData }) => {
                     </div>
                     {status.siteOverview?.unknownCount ? (
                       <div className="unknownCount-count">
-                        <span className="name">未知</span>
+                        <span className="name">Unknown</span>
                         <span className="num">
                           <CountUp
                             className="num"

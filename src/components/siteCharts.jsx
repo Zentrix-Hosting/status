@@ -3,7 +3,7 @@ import { MacScrollbar } from "mac-scrollbar";
 import { Line } from "@ant-design/plots";
 
 const SiteCharts = ({ siteDetails }) => {
-  // 处理传入数据为图表
+  // Process incoming data for the chart
   const dailyData = siteDetails.daily;
   const chartData = [...dailyData].reverse().map((data) => {
     const { uptime, date } = data;
@@ -13,7 +13,7 @@ const SiteCharts = ({ siteDetails }) => {
     };
   });
 
-  // 图标配置
+  // Chart configuration
   const chartConfig = {
     data: chartData,
     padding: "auto",
@@ -22,7 +22,7 @@ const SiteCharts = ({ siteDetails }) => {
     offsetY: 0,
     meta: {
       value: {
-        alias: "当日可用率",
+        alias: "Daily Uptime",
         formatter: (v) => `${v}%`,
       },
     },
@@ -38,20 +38,20 @@ const SiteCharts = ({ siteDetails }) => {
         {siteDetails.status !== "ok" ? (
           siteDetails.average >= 70 ? (
             <Alert
-              message="当前站点出现异常，请检查站点状态"
+              message="The site is currently experiencing issues. Please check the site status."
               type="warning"
               showIcon
             />
           ) : (
             <Alert
-              message="当前站点持续异常，请立即检查站点状态或从监控项目中删除"
+              message="The site has ongoing issues. Please check the site status immediately or remove it from monitoring."
               type="error"
               showIcon
             />
           )
         ) : (
           <Alert
-            message="当前站点状态正常，请继续保持哦"
+            message="The site is operating normally. Keep up the good work!"
             type="success"
             showIcon
           />
@@ -63,7 +63,7 @@ const SiteCharts = ({ siteDetails }) => {
             items={[
               {
                 key: "all-data",
-                label: "站点详情初始数据",
+                label: "Initial Site Data",
                 children: <p>{JSON.stringify(siteDetails)}</p>,
               },
             ]}
